@@ -295,7 +295,7 @@ CLIOptions parseCLI(int argc, char **argv) {
 		->group(CLIOptions::CLI_ABOUT_SECTION);
 	app.add_flag("--license", options.printLicense, "Show Mumble server's license.")
 		->group(CLIOptions::CLI_ABOUT_SECTION);
-	app.add_flag("--3rd-party-licenses", options.printThirdPartyLicenses,
+	app.add_flag("--third-party-licenses", options.printThirdPartyLicenses,
 				 "Show licenses for third-party software used by Mumble server.")
 		->group(CLIOptions::CLI_ABOUT_SECTION);
 
