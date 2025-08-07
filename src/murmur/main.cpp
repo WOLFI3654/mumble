@@ -194,25 +194,25 @@ void cleanup(int signum) {
 
 struct CLIOptions {
 	bool quit = false;
-	std::optional< std::string > ini_file;
-	std::optional< std::string > db_dump_path;
-	std::optional< std::string > db_import_path;
-	std::tuple< std::string, std::optional< unsigned int > > supw_srv;
-	std::optional< unsigned int > disable_su_srv;
-	bool verbose_logging = false;
-	bool cli_detach      = detach;
-	bool wipe_ssl        = false;
-	bool wipe_logs       = false;
-	bool log_groups      = false;
-	bool log_acls        = false;
+	std::optional< std::string > iniFile;
+	std::optional< std::string > dbDumpPath;
+	std::optional< std::string > dbImportPath;
+	std::tuple< std::string, std::optional< unsigned int > > supwSrv;
+	std::optional< unsigned int > disableSuSrv;
+	bool verboseLogging = false;
+	bool cliDetach      = detach;
+	bool wipeSsl        = false;
+	bool wipeLogs       = false;
+	bool logGroups      = false;
+	bool logAcls        = false;
 
-	bool print_authors            = false;
-	bool print_license            = false;
-	bool print_3rd_party_licenses = false;
+	bool printAuthors            = false;
+	bool printLicense            = false;
+	bool printThirdPartyLicenses = false;
 
 #ifdef Q_OS_UNIX
 	bool limits = false;
-	std::optional< unsigned int > read_supw_srv;
+	std::optional< unsigned int > readSupwSrv;
 #endif
 
 	static constexpr const char *const CLI_ABOUT_SECTION          = "About";
@@ -228,20 +228,20 @@ CLIOptions parseCLI(int argc, char **argv) {
 	CLI::App app;
 	app.set_version_flag("--version", Version::getRelease().toStdString());
 
-	app.add_option_no_stream("-i,--ini", options.ini_file, "Specify ini file to use.")
+	app.add_option_no_stream("-i,--ini", options.iniFile, "Specify ini file to use.")
 		->option_text("<inifile>")
 		->expected(1, 2)
 		->check(CLI::ExistingFile)
 		->group(CLIOptions::CLI_CONFIGURATION_SECTION);
 
-	app.add_option("--supw", options.supw_srv, "Set password for 'SuperUser' account on server srv.")
+	app.add_option("--supw", options.supwSrv, "Set password for 'SuperUser' account on server srv.")
 		->option_text("<pw> [srv]")
 		->allow_extra_args()
 		->expected(0, 1)
 		->group(CLIOptions::CLI_ADMINISTRATION_SECTION);
 
 #ifdef Q_OS_UNIX
-	app.add_option_no_stream("--readsupw", options.read_supw_srv, "Reads password for server srv from standard input.")
+	app.add_option_no_stream("--readsupw", options.readSupwSrv, "Reads password for server srv from standard input.")
 		->option_text("[srv]")
 		->default_val(1)
 		->expected(0, 1)
@@ -254,27 +254,27 @@ CLIOptions parseCLI(int argc, char **argv) {
 		->group(CLIOptions::CLI_TESTING_SECTION);
 #endif
 
-	app.add_option_no_stream("--disablesu", options.disable_su_srv,
+	app.add_option_no_stream("--disablesu", options.disableSuSrv,
 							 "Disable password for 'SuperUser' account on server srv.")
 		->option_text("[srv]")
 		->expected(0, 1)
 		->group(CLIOptions::CLI_ADMINISTRATION_SECTION);
-	app.add_flag("--wipessl", options.wipe_ssl, "Remove SSL certificates from database.")
+	app.add_flag("--wipessl", options.wipeSsl, "Remove SSL certificates from database.")
 		->group(CLIOptions::CLI_ADMINISTRATION_SECTION);
-	app.add_flag("--db-json-dump", options.db_dump_path,
+	app.add_flag("--db-json-dump", options.dbDumpPath,
 				 "Requests a JSON dump of the database to be written to the given file")
 		->option_text("[file]")
 		->expected(0, 1)
 		->group(CLIOptions::CLI_ADMINISTRATION_SECTION);
-	app.add_flag("--db-json-import", options.db_import_path,
+	app.add_flag("--db-json-import", options.dbImportPath,
 				 "Reads in the provide JSON file and imports its contents into the database")
 		->option_text("[file]")
 		->expected(0, 1)
 		->group(CLIOptions::CLI_ADMINISTRATION_SECTION);
 
-	app.add_flag("-v,--verbose", options.verbose_logging, "Use verbose logging (include debug-logs).")
+	app.add_flag("-v,--verbose", options.verboseLogging, "Use verbose logging (include debug-logs).")
 		->group(CLIOptions::CLI_LOGGING_SECTION);
-	app.add_flag("!-f,!--force-fg", options.cli_detach,
+	app.add_flag("!-f,!--force-fg", options.cliDetach,
 #ifdef Q_OS_UNIX
 				 "Don't detach from console."
 #else
@@ -283,19 +283,19 @@ CLIOptions parseCLI(int argc, char **argv) {
 				 )
 		->group(CLIOptions::CLI_LOGGING_SECTION);
 
-	app.add_flag("--wipelogs", options.wipe_logs, "Remove all log entries from database.")
+	app.add_flag("--wipelogs", options.wipeLogs, "Remove all log entries from database.")
 		->group(CLIOptions::CLI_LOGGING_SECTION);
-	app.add_flag("--loggroups", options.log_groups, "Turns on logging for group changes for all servers.")
+	app.add_flag("--loggroups", options.logGroups, "Turns on logging for group changes for all servers.")
 		->group(CLIOptions::CLI_LOGGING_SECTION);
-	app.add_flag("--logacls", options.log_acls, "Turns on logging for ACL changes for all servers.")
+	app.add_flag("--logacls", options.logAcls, "Turns on logging for ACL changes for all servers.")
 		->group(CLIOptions::CLI_LOGGING_SECTION);
 
 
-	app.add_flag("--authors", options.print_authors, "Show Mumble server's authors.")
+	app.add_flag("--authors", options.printAuthors, "Show Mumble server's authors.")
 		->group(CLIOptions::CLI_ABOUT_SECTION);
-	app.add_flag("--license", options.print_license, "Show Mumble server's license.")
+	app.add_flag("--license", options.printLicense, "Show Mumble server's license.")
 		->group(CLIOptions::CLI_ABOUT_SECTION);
-	app.add_flag("--3rd-party-licenses", options.print_3rd_party_licenses,
+	app.add_flag("--3rd-party-licenses", options.printThirdPartyLicenses,
 				 "Show licenses for third-party software used by Mumble server.")
 		->group(CLIOptions::CLI_ABOUT_SECTION);
 
@@ -377,7 +377,7 @@ int main(int argc, char **argv) {
 		if (cli_options.quit)
 			return 0;
 
-		if (cli_options.print_license) {
+		if (cli_options.printLicense) {
 #ifdef Q_OS_WIN
 			AboutDialog ad(nullptr, AboutDialogOptionsShowLicense);
 			ad.exec();
@@ -386,7 +386,7 @@ int main(int argc, char **argv) {
 			qInfo("%s\n", qPrintable(License::license()));
 			return 0;
 #endif
-		} else if (cli_options.print_authors) {
+		} else if (cli_options.printAuthors) {
 #ifdef Q_OS_WIN
 			AboutDialog ad(nullptr, AboutDialogOptionsShowAuthors);
 			ad.exec();
@@ -396,7 +396,7 @@ int main(int argc, char **argv) {
 				  "For a list of authors, please see https://github.com/mumble-voip/mumble/graphs/contributors");
 			return 0;
 #endif
-		} else if (cli_options.print_3rd_party_licenses) {
+		} else if (cli_options.printThirdPartyLicenses) {
 #ifdef Q_OS_WIN
 			AboutDialog ad(nullptr, AboutDialogOptionsShowThirdPartyLicenses);
 			ad.exec();
@@ -407,39 +407,39 @@ int main(int argc, char **argv) {
 #endif
 		}
 
-		detach          = cli_options.cli_detach;
-		QString inifile = QString::fromStdString(cli_options.ini_file.value_or(""));
+		detach          = cli_options.cliDetach;
+		QString inifile = QString::fromStdString(cli_options.iniFile.value_or(""));
 		QString supw;
 		bool disableSu     = false;
-		bool wipeSsl       = cli_options.wipe_ssl;
-		bool wipeLogs      = cli_options.wipe_logs;
+		bool wipeSsl       = cli_options.wipeSsl;
+		bool wipeLogs      = cli_options.wipeLogs;
 		unsigned int sunum = 0;
 #ifdef Q_OS_UNIX
 		bool readPw = false;
 #endif
-		bool logGroups = cli_options.log_groups;
-		bool logACL    = cli_options.log_acls;
+		bool logGroups = cli_options.logGroups;
+		bool logACL    = cli_options.logAcls;
 
-		bVerbose = cli_options.verbose_logging;
+		bVerbose = cli_options.verboseLogging;
 
-		if (cli_options.disable_su_srv) {
+		if (cli_options.disableSuSrv) {
 			detach    = false;
 			disableSu = true;
-			sunum     = *cli_options.disable_su_srv;
+			sunum     = *cli_options.disableSuSrv;
 		}
 
-		if (!std::get< 0 >(cli_options.supw_srv).empty()) {
-			supw  = QString::fromStdString(std::get< 0 >(cli_options.supw_srv));
-			sunum = std::get< 1 >(cli_options.supw_srv).value_or< unsigned int >(1);
+		if (!std::get< 0 >(cli_options.supwSrv).empty()) {
+			supw  = QString::fromStdString(std::get< 0 >(cli_options.supwSrv));
+			sunum = std::get< 1 >(cli_options.supwSrv).value_or< unsigned int >(1);
 #ifdef Q_OS_LINUX
-		} else if (cli_options.read_supw_srv) {
+		} else if (cli_options.readSupwSrv) {
 			// Note that it is essential to set detach = false here. If this is ever to be changed, the code part
 			// handling the readPw = true part has to be moved up so that it is executed before fork is called on Unix
 			// systems.
 
 			detach = false;
 			readPw = true;
-			sunum  = *cli_options.read_supw_srv;
+			sunum  = *cli_options.readSupwSrv;
 		}
 
 		if (cli_options.limits) {
@@ -463,22 +463,22 @@ int main(int argc, char **argv) {
 
 		Meta::mp->read(inifile);
 
-		if (cli_options.db_dump_path) {
+		if (cli_options.dbDumpPath) {
 			DBWrapper wrapper(Meta::getConnectionParameter());
 
-			std::ofstream file(*cli_options.db_dump_path);
+			std::ofstream file(*cli_options.dbDumpPath);
 			file << wrapper.exportDBToJSON().dump(2);
 
-			qInfo("Dumped JSON representation of database contents to '%s'", cli_options.db_dump_path->c_str());
+			qInfo("Dumped JSON representation of database contents to '%s'", cli_options.dbDumpPath->c_str());
 
 			return 0;
 		}
 
-		if (cli_options.db_import_path) {
-			qInfo("Importing contents of '%s' into database", cli_options.db_import_path->c_str());
+		if (cli_options.dbImportPath) {
+			qInfo("Importing contents of '%s' into database", cli_options.dbImportPath->c_str());
 			DBWrapper wrapper(Meta::getConnectionParameter());
 
-			std::ifstream file(*cli_options.db_import_path);
+			std::ifstream file(*cli_options.dbImportPath);
 
 			nlohmann::json json;
 			file >> json;
