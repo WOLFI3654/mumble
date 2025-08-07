@@ -243,17 +243,12 @@ struct CLIOptions {
 	static constexpr const char *CLI_DEBUG_SECTION    = "Debug";
 	static constexpr const char *CLI_REMOTE_SECTION   = "Remote Control";
 
-	static const std::map< std::string, std::string > rpcCommandMap;
+	static const std::set< std::string > knownRpcCommands;
 };
 
-const std::map< std::string, std::string > CLIOptions::rpcCommandMap = { { "mute", "mute" },
-																		 { "unmute", "unmute" },
-																		 { "togglemute", "togglemute" },
-																		 { "deaf", "deaf" },
-																		 { "undeaf", "undeaf" },
-																		 { "toggledeaf", "toggledeaf" },
-																		 { "starttalking", "starttalking" },
-																		 { "stoptalking", "stoptalking" } };
+const std::set< std::string > CLIOptions::knownRpcCommands = {
+	"mute", "unmute", "togglemute", "deaf", "undeaf", "toggledeaf", "starttalking", "stoptalking",
+};
 
 CLIOptions parseCLI(int argc, char **argv) {
 	CLIOptions options;
@@ -354,11 +349,10 @@ CLIOptions parseCLI(int argc, char **argv) {
 		->option_text("<url> | <plugin_list>")
 		->group(CLIOptions::CLI_GENERAL_SECTION);
 
-	CLI::App *rpc = app.add_subcommand("rpc", "It is possible to remote control a running instance of Mumble by using "
-											  "the 'mumble rpc' command");
+	CLI::App *rpc = app.add_subcommand("rpc", "Remote control a running instance of Mumble");
 	rpc->add_option("action", options.rpcCommand, "Action to perform")
 		->required()
-		->transform(CLI::CheckedTransformer(options.rpcCommandMap, CLI::ignore_case));
+		->check(CLI::IsMember(CLIOptions::knownRpcCommands, CLI::ignore_case));
 
 	try {
 		app.parse(argc, argv);
