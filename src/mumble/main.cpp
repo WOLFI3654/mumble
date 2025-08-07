@@ -285,10 +285,10 @@ CLIOptions parseCLI(int argc, char **argv) {
 	app.add_flag("-m,--multiple", options.allowMultiple, "Allow multiple instances of the client to be started.")
 		->group(CLIOptions::CLI_GENERAL_SECTION);
 
-	app.add_flag("--noidentity", options.suppressIdentity, "Suppress loading of identity files (i.e., certificates).")
+	app.add_flag("--no-identity", options.suppressIdentity, "Suppress loading of identity files (i.e., certificates).")
 		->group(CLIOptions::CLI_GENERAL_SECTION);
 
-	app.add_option("--jackname", options.jackClientName, "Set custom Jack client name.")
+	app.add_option("--jack-name", options.jackClientName, "Set custom Jack client name.")
 		->option_text("<name>")
 		->group(CLIOptions::CLI_GENERAL_SECTION);
 

@@ -234,14 +234,14 @@ CLIOptions parseCLI(int argc, char **argv) {
 		->check(CLI::ExistingFile)
 		->group(CLIOptions::CLI_CONFIGURATION_SECTION);
 
-	app.add_option("--supw", options.supwSrv, "Set password for 'SuperUser' account on server srv.")
+	app.add_option("--set-su-pw", options.supwSrv, "Set password for 'SuperUser' account on server srv.")
 		->option_text("<pw> [srv]")
 		->allow_extra_args()
 		->expected(0, 1)
 		->group(CLIOptions::CLI_ADMINISTRATION_SECTION);
 
 #ifdef Q_OS_UNIX
-	app.add_option_no_stream("--readsupw", options.readSupwSrv, "Reads password for server srv from standard input.")
+	app.add_option_no_stream("--read-su-pw", options.readSupwSrv, "Reads password for server srv from standard input.")
 		->option_text("[srv]")
 		->default_val(1)
 		->expected(0, 1)
@@ -254,12 +254,12 @@ CLIOptions parseCLI(int argc, char **argv) {
 		->group(CLIOptions::CLI_TESTING_SECTION);
 #endif
 
-	app.add_option_no_stream("--disablesu", options.disableSuSrv,
+	app.add_option_no_stream("--disable-su", options.disableSuSrv,
 							 "Disable password for 'SuperUser' account on server srv.")
 		->option_text("[srv]")
 		->expected(0, 1)
 		->group(CLIOptions::CLI_ADMINISTRATION_SECTION);
-	app.add_flag("--wipessl", options.wipeSsl, "Remove SSL certificates from database.")
+	app.add_flag("--wipe-ssl", options.wipeSsl, "Remove SSL certificates from database.")
 		->group(CLIOptions::CLI_ADMINISTRATION_SECTION);
 	app.add_flag("--db-json-dump", options.dbDumpPath,
 				 "Requests a JSON dump of the database to be written to the given file")
@@ -283,11 +283,11 @@ CLIOptions parseCLI(int argc, char **argv) {
 				 )
 		->group(CLIOptions::CLI_LOGGING_SECTION);
 
-	app.add_flag("--wipelogs", options.wipeLogs, "Remove all log entries from database.")
+	app.add_flag("--wipe-logs", options.wipeLogs, "Remove all log entries from database.")
 		->group(CLIOptions::CLI_LOGGING_SECTION);
-	app.add_flag("--loggroups", options.logGroups, "Turns on logging for group changes for all servers.")
+	app.add_flag("--log-groups", options.logGroups, "Turns on logging for group changes for all servers.")
 		->group(CLIOptions::CLI_LOGGING_SECTION);
-	app.add_flag("--logacls", options.logAcls, "Turns on logging for ACL changes for all servers.")
+	app.add_flag("--log-acls", options.logAcls, "Turns on logging for ACL changes for all servers.")
 		->group(CLIOptions::CLI_LOGGING_SECTION);
 
 
