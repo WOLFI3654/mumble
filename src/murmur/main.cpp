@@ -274,13 +274,10 @@ CLIOptions parseCLI(int argc, char **argv) {
 
 	app.add_flag("-v,--verbose", options.verboseLogging, "Use verbose logging (include debug-logs).")
 		->group(CLIOptions::CLI_LOGGING_SECTION);
-	app.add_flag("!-f,!--force-fg", options.cliDetach,
-#ifdef Q_OS_UNIX
-				 "Don't detach from console."
-#else
-				 "Don't write to the log file."
-#endif
-				 )
+	app.add_flag("--detach,!--no-detach,--background,!--foreground", options.cliDetach,
+				 "Whether to run in detached/background mode. In this mode, the program will detach and run as an "
+				 "independent process in the background. Furthermore, logs will be written to the database instead of "
+				 "to the console.")
 		->group(CLIOptions::CLI_LOGGING_SECTION);
 
 	app.add_flag("--wipe-logs", options.wipeLogs, "Remove all log entries from database.")
